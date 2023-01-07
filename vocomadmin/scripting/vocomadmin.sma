@@ -24,6 +24,7 @@
 *v1.2 - fixed people being able to see "is talking to admin" by non admins.
 *v1.3 - fixed admin level problems by checking it once and storing it.
 *v1.4 - removed some unneeded things (dont develop 2 plugins at the same time lol) cleaned up code
+*v1.5 - added in color chat support ~Koz
 */
 
 #include <amxmodx>
@@ -31,8 +32,8 @@
 #include <fakemeta>
 
 #define PLUGIN "VocomAdmin"
-#define VERSION "1.3"
-#define AUTHOR "Nut"
+#define VERSION "1.5"
+#define AUTHOR "Nut & KoZ"
 
 //defines for speak flags, ADMIN helps tell speak apart easier
 #define SPEAK_MUTED	0
@@ -60,6 +61,21 @@ public client_connect(id) {
 	set_speak(id,SPEAK_NORMAL)
 	g_admin[id] = 0				//just incase, but client_auth gets called after this anyway.
 }
+
+client_printc(index, const text[], any:...)
+{
+    new szMsg[128];
+    vformat(szMsg, sizeof(szMsg) - 1, text, 3);
+    
+    replace_all(szMsg, sizeof(szMsg) - 1, "!g", "^x04");
+    replace_all(szMsg, sizeof(szMsg) - 1, "!n", "^x01");
+    replace_all(szMsg, sizeof(szMsg) - 1, "!t", "^x03");
+    
+    message_begin(MSG_ONE_UNRELIABLE, get_user_msgid("SayText"), _, index);
+    write_byte(index);
+    write_string(szMsg);
+    message_end();
+} 
 
 //this is called after client connect.  Caused problems with admin check because 
 //AMXX doesnt authorize on client connect... hence this event.
@@ -102,7 +118,7 @@ public get_speak(id) {
 
 public vocomStart(id) {
 	if (!g_admin[id]) {
-		client_print(id,print_chat,"[AMXX]: You have no access to this command.")
+		client_printc(id,"!t[AMXX]: You have no access to this command.")
 		return PLUGIN_HANDLED
 	}
 
@@ -115,12 +131,12 @@ public vocomStart(id) {
 	for (new i = 0; i < pCount; i++) {
 		if (g_admin[i]) {
 			if (i != id) {
-				client_print(i,print_chat,"[AMXX]: %s is speaking to the other admins.",name)
+				client_printc(i,"!g[AMXX]: %s is speaking to the other admins.",name)
 			}
 		}	
 	}
 	
-	client_print(id,print_chat,"[AMXX]: You are speaking to the admins.",name)
+	client_printc(id,"!g[AMXX]: You are speaking to the admins.",name)
 	return PLUGIN_HANDLED
 }
 
