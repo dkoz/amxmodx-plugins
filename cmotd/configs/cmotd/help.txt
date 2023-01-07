@@ -1,0 +1,42 @@
+<html>
+<head>
+<title>Help</title>
+<style type="text/css">
+pre 	{
+		font-family:Verdana,Tahoma;
+		color:#FFB000;
+    	}
+body	{
+		background:#000000;
+		margin-left:8px;
+		margin-top:0px;
+		}
+a	{
+    	text-decoration:    underline;
+	}
+a:link  {
+    color:  #FFFFFF;
+    }
+a:visited   {
+    color:  #FFFFFF;
+    }
+a:active    {
+    color:  #FFFFFF;
+    }
+a:hover {
+    color:  #FFFFFF;
+    text-decoration:    underline;
+    }
+</style>
+</head>
+<body scroll="yes">
+<pre>
+List of various commands on our server.
+
+/rules - Shows the rules that all players must obide by.
+/rank - Shows your rank on the server.
+/top15 - Shows the top 10 players on the server.
+/me - Shows your hit stats for the current round.
+</pre>
+</body>
+</html>
